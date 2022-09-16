@@ -88,18 +88,17 @@ class SourcegraphOpenCommand(sublime_plugin.TextCommand):
 
 		# Open in browser
 		settings = sublime.load_settings(FILENAME_SETTINGS)
-		url = sourcegraphURL(settings)+'-/editor?' + urlencode({
-			'remote_url': remoteURL,
-			'branch': branch,
-			'file': fileRel,
-			'editor': 'Sublime',
-			'version': VERSION,
 
-			'start_row': row,
-			'start_col': col,
-			'end_row': row2,
-			'end_col': col2,
-		})
+		url = "".join([
+			sourcegraphURL(settings),
+			remoteURL.split('/').pop(),
+			'/-/blob/',
+			fileRel,
+			'/?',
+			'L' + str(row + 1),
+			'-L' +  str(row2 + 1) if row2 else ''
+		])
+
 		webbrowserOpen(url)
 
 class SourcegraphSearchCommand(sublime_plugin.TextCommand):
