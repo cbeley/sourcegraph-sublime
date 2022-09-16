@@ -114,15 +114,16 @@ class SourcegraphSearchCommand(sublime_plugin.TextCommand):
 
 		# Search in browser
 		settings = sublime.load_settings(FILENAME_SETTINGS)
-		url = sourcegraphURL(settings)+'-/editor?' + urlencode({
-			'remote_url': remoteURL,
-			'branch': branch,
-			'file': fileRel,
-			'editor': 'Sublime',
-			'version': VERSION,
 
-			'search': query,
-		})
+		url = "".join([
+			sourcegraphURL(settings),
+			remoteURL.split('/').pop(),
+			'?',
+			urlencode({
+				'q': query
+			})
+		])
+		
 		webbrowserOpen(url)
 
 def webbrowserOpen(url):
